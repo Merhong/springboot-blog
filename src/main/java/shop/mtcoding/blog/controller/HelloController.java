@@ -31,4 +31,23 @@ public class HelloController {
 
         return "array";
     }
+
+    @GetMapping("/users")
+    public String users(Model model) {
+        List<User> list = new ArrayList<>();
+        list.add(new User(1, "ssar"));
+        list.add(new User(2, "cos"));
+        model.addAttribute("list", list);
+        model.addAttribute("yougood", true);
+        return "users";
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    class User {
+        private int id;
+        private String username;
+    }
 }
