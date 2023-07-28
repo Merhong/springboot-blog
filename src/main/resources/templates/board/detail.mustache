@@ -1,82 +1,82 @@
 {{> /layout/header}}
 
 <div class="container p-5">
-    <!-- 요청을 하면 localhost:8080/board/save POST 요청됨 -->
-    <!-- title=사용자입력값&content=사용자입력값 -->
+	<!-- 요청을 하면 localhost:8080/board/save POST 요청됨 -->
+	<!-- title=사용자입력값&content=사용자입력값 -->
 
 
-    <!-- 메뉴 버튼(돌아가기, 수정, 삭제) -->
-    <div class="mb-2 d-flex justify-content-end">
-        <button type="button" class="btn btn-success me-1">돌아가기</button>
-        <button type="button" class="btn btn-primary me-1">수정</button>
-        <button type="button" class="btn btn-danger me-1">삭제</button>
-    </div>
+	<!-- 메뉴 버튼(돌아가기, 수정, 삭제) -->
+	<div class="mb-2 d-flex justify-content-end">
+		<button type="button" class="btn btn-success me-1">돌아가기</button>
+		<button type="button" class="btn btn-primary me-1">수정</button>
+		<button type="button" class="btn btn-danger me-1">삭제</button>
+	</div>
 
-    <!-- 글 번호, 작성자 -->
-    <div class="info mb-2 d-flex justify-content-end">
-        글 번호 : 1 || 작성자 : Merhong
-    </div>
+	<!-- 글 번호, 작성자 -->
+	<div class="info mb-2 d-flex justify-content-end">
+		글 번호 : 1 || 작성자 : Merhong
+	</div>
 
-    <!-- 제목과 내용 -->
-    <div class="content1 mb-3">
-        <h2>
-            제목(Title)
-        </h2>
-        <hr>
-        <div>
-            내용
-            <br>
-            Contents
-        </div>
-    </div>
+	<!-- 제목과 내용 -->
+	<div class="content1 mb-3">
+		<h2>
+			제목(Title)
+		</h2>
+		<hr>
+		<div>
+			내용
+			<br>
+			Contents
+		</div>
+	</div>
 
-    <!-- 댓글(Comment) 등록 -->
-    <div class="card">
-        <div class="card-body">
-            <form action="/board/1" method="post" enctype="application/x-www-form-urlencoded">
-                <textarea class="form-control" rows="3" name="comment"></textarea>
-                <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mt-2">등록</button>
-                </div>
-            </form>
-        </div>
+	<!-- 댓글(Comment) 등록 -->
+	<div class="card">
+		<div class="card-body">
+			<form action="/board/1" method="post" enctype="application/x-www-form-urlencoded">
+				<textarea class="form-control" rows="3" name="comment"></textarea>
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-primary mt-2">등록</button>
+				</div>
+			</form>
+		</div>
 
-        <!-- 댓글 리스트 -->
-        <div class="card-footer">
-            <b>댓글 리스트</b>
-        </div>
+		<!-- 댓글 리스트 -->
+		<div class="card-footer">
+			<b>댓글 리스트</b>
+		</div>
 
-        <!-- 댓글 -->
-        <div class="list-group">
-            <form action="/board/1" method="post" enctype="application/x-www-form-urlencoded">
+		<!-- 댓글 -->
+		<div class="list-group">
+			<form action="/board/1" method="post" enctype="application/x-www-form-urlencoded">
 
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex">
-                        <div class="me-3 px-1 bg-dark text-white rounded">
-                            Ahong
-                        </div>
-                        <div>
-                            댓글1111
-                        </div>
-                    </div>
-                    <button class="btn btn-danger">삭제</button>
-                </div>
+				<div class="list-group-item d-flex justify-content-between align-items-center">
+					<div class="d-flex">
+						<div class="me-3 px-1 bg-dark text-white rounded">
+							Ahong
+						</div>
+						<div>
+							댓글1111
+						</div>
+					</div>
+					<button class="btn btn-danger">삭제</button>
+				</div>
 
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex">
-                        <div class="me-3 px-1 bg-dark text-white rounded">
-                            bhong
-                        </div>
-                        <div>
-                            댓글2222
-                        </div>
-                    </div>
-                    <button class="btn btn-danger">삭제</button>
-                </div>
+				<div class="list-group-item d-flex justify-content-between align-items-center">
+					<div class="d-flex">
+						<div class="me-3 px-1 bg-dark text-white rounded">
+							bhong
+						</div>
+						<div>
+							댓글2222
+						</div>
+					</div>
+					<button class="btn btn-danger">삭제</button>
+				</div>
 
-            </form>
-        </div>
-    </div>
+			</form>
+		</div>
+	</div>
 </div>
 
 {{> /layout/footer}}
