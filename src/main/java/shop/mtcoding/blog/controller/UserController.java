@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import shop.mtcoding.blog.Repository.UserRepository;
+import shop.mtcoding.blog.repository.UserRepository;
 import shop.mtcoding.blog.dto.joinDTO;
 
 /**
@@ -57,7 +57,7 @@ public class UserController {
     // @PostMapping("/join")
     // public String join(String username, String password, String email) {
     //     System.out.println("username : " + username);
-    //     System.out.println("password : " + password);
+    //     System.out.printl    n("password : " + password);
     //     System.out.println("email : " + email);
     //     return "redirect:/loginForm";
     // }

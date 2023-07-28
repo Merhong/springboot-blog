@@ -14,6 +14,10 @@ import lombok.Setter;
  * 5. 응답 : view(html)를 응답함.
  */
 
+//  Select를 위해서 뿐만 아니라 요청(POST)을 위해서도 DTO를 사용할 수 있음
+//  요청에 String, Interger등 여러타입이 섞여 있는 경우 클래스 DTO로 받을 수 있음
+//  게터, 세터를 만들어주면 자동으로 new해서 생성해줌.
+
 // 회원가입을 위한 DTO
 // joinForm.mustache를 보고 제작한다.
 // Getter와 Setter가 필요하다.

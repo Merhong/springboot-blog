@@ -1,4 +1,4 @@
-package shop.mtcoding.blog.Repository;
+package shop.mtcoding.blog.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -7,7 +7,6 @@ import shop.mtcoding.blog.dto.joinDTO;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.print.attribute.standard.JobOriginatingUserName;
 
 // 현재 메모리에 로딩되어 있는 것?
 // BoardController, UserController, UserRepository

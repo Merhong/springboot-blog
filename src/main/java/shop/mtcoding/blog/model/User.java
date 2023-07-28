@@ -16,7 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // auto_increment
     private Integer id;
 
-    @Column(nullable = false, length = 20, unique = true) // not null 속성 부여
+    // Not null, Unique 속성부여 및 20자 길이제한
+    @Column(nullable = false, length = 20, unique = true)
     private String username;
 
     @Column(nullable = false, length = 20) // not null 속성 부여
