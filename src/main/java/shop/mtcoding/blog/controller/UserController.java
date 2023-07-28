@@ -4,6 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+
 /**
  * Controller 어노테이션
  * 1. 컴포넌트 스캔
@@ -13,12 +17,48 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
+    // 정상인
     // x-www-form-urlencoded 형식으로 들어오는 데이터 받아서 콘솔로 출력하기.
+    // DS(컨트롤러 메서드 찾기, 바디데이터 파싱)
+    // DS가 바디데이터를 파싱안하고 컨트롤러 메서드만 찾은 상황
     @PostMapping("/join")
-    public void join(String username, String password, String email) {
-        System.out.println("이름 : " + username); // username
-        System.out.println("패스워드 : " + password); // password
-        System.out.println("E-mail : " + email); // email
+    public String join(String username, String password, String email) {
+        System.out.println("username : " + username);
+        System.out.println("password : " + password);
+        System.out.println("email : " + email);
+        return "redirect:/loginForm";
+    }
+
+    // // 비정상
+    // @PostMapping("/join")
+    // public String join(HttpServletRequest request) throws IOException {
+    //     // http 바디데이터가 다 들어옴, 헤더는 안들어온다.
+    //     // username=ssar&password=1234&email=ssar@nate.com
+    //     BufferedReader br = request.getReader();
+    //     // 버퍼 소비
+    //     String body = br.readLine();
+    //
+    //     // 아래는 버퍼가 (readline에서) 소비됐기에 값이 없어서 사용불가!!!
+    //     String username = request.getParameter("username");
+    //     System.out.println("username : " + username);
+    //     System.out.println("body : " + body);
+    //
+    //     return "redirect:/loginForm";
+    // }
+
+    // 약간 정상
+    // x-www-form-urlencoded 형식으로 들어오는 데이터 받아서 콘솔로 출력하기.
+    // DS(컨트롤러 메서드 찾기, 바디데이터 파싱)
+    // DS가 바디데이터를 파싱안하고 컨트롤러 메서드만 찾은 상황
+    @PostMapping("/join")
+    public String join(HttpServletRequest request) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        System.out.println("username : " + username);
+        System.out.println("password : " + password);
+        System.out.println("email : " + email);
+        return "redirect:/loginForm";
     }
 
     // 브라우저 입력 : GET 요청!
