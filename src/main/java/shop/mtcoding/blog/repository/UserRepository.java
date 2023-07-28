@@ -3,7 +3,7 @@ package shop.mtcoding.blog.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import shop.mtcoding.blog.dto.joinDTO;
+import shop.mtcoding.blog.dto.JoinDTO;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -19,7 +19,7 @@ public class UserRepository {
     private EntityManager em;
 
     @Transactional // Update, delete, insert시에 걸어서 사용
-    public void save(joinDTO joinDTO) {
+    public void save(JoinDTO joinDTO) {
         // 1. 쿼리문 작성
         Query query = em.createNativeQuery("insert into user_tb(username, password, email) values(:username, :password, :email)");
         // 2. 변수 바인딩

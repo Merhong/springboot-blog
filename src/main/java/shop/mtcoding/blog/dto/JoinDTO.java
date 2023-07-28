@@ -22,7 +22,7 @@ import lombok.Setter;
 // joinForm.mustache를 보고 제작한다.
 // Getter와 Setter가 필요하다.
 @Getter @Setter
-public class joinDTO {
+public class JoinDTO {
     private String username;
     private String password;
     private String email;

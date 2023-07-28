@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.repository.UserRepository;
-import shop.mtcoding.blog.dto.joinDTO;
+import shop.mtcoding.blog.dto.JoinDTO;
 
 /**
  * Controller 어노테이션
@@ -23,7 +23,7 @@ public class UserController {
     // 정상인(실무)
     // x-www-form-urlencoded 형식으로 들어오는 데이터 받아서 콘솔로 출력하기.
     @PostMapping("/join")
-    public String join(joinDTO joinDTO) {
+    public String join(JoinDTO joinDTO) {
 
         // 유효성 검사(Validation Check)
         // null 입력 값을 제거한다.
