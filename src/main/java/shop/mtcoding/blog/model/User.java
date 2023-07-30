@@ -1,8 +1,6 @@
 package shop.mtcoding.blog.model;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.*;

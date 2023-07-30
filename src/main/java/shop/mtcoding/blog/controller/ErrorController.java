@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ErrorController {
 
     @GetMapping("/40x")
-    public String ex40x(){
+    public String ex40x() {
         return "error/ex40x";
     }
 }
