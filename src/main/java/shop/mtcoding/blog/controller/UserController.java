@@ -50,14 +50,14 @@ public class UserController {
         return "redirect:/loginForm";
     }
 
-    // // 정상인(학생)
-    // // x-www-form-urlencoded 형식으로 들어오는 데이터 받아서 콘솔로 출력하기.
-    // // DS(컨트롤러 메서드 찾기, 바디데이터 파싱)
-    // // DS가 바디데이터를 파싱안하고 컨트롤러 메서드만 찾은 상황
+    // 정상인(학생)
+    // x-www-form-urlencoded 형식으로 들어오는 데이터 받아서 콘솔로 출력하기.
+    // DS(컨트롤러 메서드 찾기, 바디데이터 파싱)
+    // DS가 바디데이터를 파싱안하고 컨트롤러 메서드만 찾은 상황
     // @PostMapping("/join")
     // public String join(String username, String password, String email) {
     //     System.out.println("username : " + username);
-    //     System.out.printl    n("password : " + password);
+    //     System.out.println("password : " + password);
     //     System.out.println("email : " + email);
     //     return "redirect:/loginForm";
     // }
