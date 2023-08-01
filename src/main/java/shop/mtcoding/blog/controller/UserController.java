@@ -135,7 +135,7 @@ public class UserController {
     }
 
     // Browser URL : IP주소:포트번호/login 입력시 호출
-    @GetMapping("/login")
+    @GetMapping("/loginForm")
     public String loginForm() {
         // view 파일 호출 user/loginForm 파일 호출
         return "user/loginForm";
@@ -151,6 +151,9 @@ public class UserController {
     // Browser URL : IP주소:포트번호/logout 입력시 호출
     @GetMapping("/logout")
     public String logout() {
+        // 로그아웃시 세션 무효화 (내 서랍을 비우는 것)
+        session.invalidate();
+
         // view 파일 호출 -> Welcome File List에서 "/"가 index로 지정되어 있음!
         // redirect는 스프링에서 지원하는 문법
         return "redirect:/";

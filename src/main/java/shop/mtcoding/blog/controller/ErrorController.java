@@ -10,7 +10,7 @@ public class ErrorController {
     public String ex40x() {
         return "error/ex40x";
     }
-    
+
     @GetMapping("/exLogin")
     public String exLogin() {
         return "error/exLogin";
