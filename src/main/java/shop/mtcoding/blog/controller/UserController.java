@@ -41,7 +41,11 @@ public class UserController {
             return "redirect:/40x";
         }
         // MVC패턴의 M(Model)
-        userRepository.save(joinDTO);
+        try {
+            userRepository.save(joinDTO);
+        } catch (Exception e) {
+            return "redirect:/50x";
+        }
 
         System.out.println("username : " + joinDTO.getUsername());
         System.out.println("password : " + joinDTO.getPassword());
