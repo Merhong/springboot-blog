@@ -5,11 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import shop.mtcoding.blog.dto.WriteDTO;
+import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.repository.BoardRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Controller 어노테이션
@@ -45,9 +49,24 @@ public class BoardController {
         return "redirect:/";
     }
 
-    // Browser URL : IP주소:포트번호/ or /board 입력시 호출
+    // 조회
+    // 1. 유효성 검사 X
+    // 2. 인증검사 X
+    // Browser URL : localhost:8080/ or /board 입력시 호출
     @GetMapping({"/", "/board"})
-    public String index() {
+    // page에 입력값이 없으면 0이 디폴트로 들어감 (문자열)
+    public String index(@RequestParam(defaultValue = "0") Integer page, HttpServletRequest request) {
+
+        List<Board> boardList = boardRepository.findAll(page);
+        System.out.println("테스트 : " + boardList.size());
+        System.out.println("테스트 : " + boardList.get(0).getTitle());
+
+        request.setAttribute("boardList", boardList);
+        request.setAttribute("prevPage", page - 1);
+        request.setAttribute("nextPage", page + 1);
+        request.setAttribute("first", page == 0 ? true : false);
+        request.setAttribute("last", false);
+
         // view 파일 호출, index
         return "index";
     }
@@ -67,7 +86,10 @@ public class BoardController {
     // localhost:8080/board/1
     // localhost:8080/board/2
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id) {
+    public String detail(@PathVariable Integer id, HttpServletRequest request) {
+        Board board = boardRepository.findById(id);
+        request.setAttribute("board", board);
+
         // view 파일 호출, board/detail
         return "board/detail";
     }
