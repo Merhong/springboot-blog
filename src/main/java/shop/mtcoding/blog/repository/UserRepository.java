@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.dto.JoinDTO;
+import shop.mtcoding.blog.dto.LoginDTO;
+import shop.mtcoding.blog.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -17,6 +19,17 @@ public class UserRepository {
     // IoC 컨테이너에서 들고옴
     @Autowired
     private EntityManager em;
+
+    // 로그인에 사용되는 메서드, ID와 Password가 같으면 Pass
+    public User findByUsernameAndPassword(LoginDTO loginDTO) {
+        // 1. 쿼리문 작성
+        Query query = em.createNativeQuery("select * from user_tb where username = :username and password = :password", User.class);
+        // 2. 변수 바인딩
+        query.setParameter("username", loginDTO.getUsername());
+        query.setParameter("password", loginDTO.getPassword());
+        // 3. 전송
+        return (User) query.getSingleResult();
+    }
 
     @Transactional // Update, delete, insert시에 걸어서 사용
     public void save(JoinDTO joinDTO) {

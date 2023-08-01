@@ -5,7 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.dto.JoinDTO;
+import shop.mtcoding.blog.dto.LoginDTO;
+import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.repository.UserRepository;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Controller 어노테이션
@@ -16,9 +20,33 @@ import shop.mtcoding.blog.repository.UserRepository;
 @Controller
 public class UserController {
 
-    @Autowired // DI
+    @Autowired // IoC 컨테이너
     private UserRepository userRepository;
 
+    @Autowired // IoC 컨테이너
+    private HttpSession session; // request는 가방, session은 서랍
+
+    // 로그인
+    @PostMapping("/login")
+    public String login(LoginDTO loginDTO) {
+        // 유효성 검사(부가 로직)
+        if (loginDTO.getUsername() == null || loginDTO.getUsername().isEmpty()) {
+            return "redirect:/40x";
+        }
+        if (loginDTO.getPassword() == null || loginDTO.getPassword().isEmpty()) {
+            return "redirect:/40x";
+        }
+
+        // 핵심 기능
+        try {
+            User user = userRepository.findByUsernameAndPassword(loginDTO);
+            session.setAttribute("sessionUser", user);
+            return "redirect:/";
+        } catch (Exception e) {
+            return "redirect:/exLogin";
+        }
+
+    }
 
     // 정상인(실무)
     // x-www-form-urlencoded 형식으로 들어오는 데이터 받아서 콘솔로 출력하기.
