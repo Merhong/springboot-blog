@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import shop.mtcoding.blog.dto.UpdateDTO;
 import shop.mtcoding.blog.dto.WriteDTO;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.User;
@@ -29,6 +30,51 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
 
+    // Update 기능 구현
+    @PostMapping("/board/{id}/update")
+    public String update(@PathVariable Integer id, UpdateDTO updateDTO) {
+        // 1. 인증 검사
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
+        // 2. 권한 체크
+        // Board를 조회해서 가방(request)에 담는다
+        Board board = boardRepository.findById(id);
+        // 게시글을 쓴 유저 ID와 세션 ID가 같지 않으면, 다른 사람이란 뜻.
+        if (board.getUser().getId() != sessionUser.getId()) {
+            return "redirect:/40x";
+        }
+        // 3. 핵심 기능
+        // update board_tb set title = :title, content = :content where id = :id
+        boardRepository.update(updateDTO, id);
+        // update() 메서드 호출후에 갱신된 글로 리다이렉트
+        return "redirect:/board/" + id;
+    }
+
+    // UpdateForm
+    @GetMapping("/board/{id}/updateForm")
+    public String updateForm(@PathVariable Integer id, HttpServletRequest request) {
+        // 1. 인증 검사
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/40x";
+        }
+        // 2. 권한 체크
+        // Board를 조회해서 가방(request)에 담는다
+        Board board = boardRepository.findById(id);
+        // 게시글을 쓴 유저 ID와 세션 ID가 같지 않으면, 다른 사람이란 뜻.
+        if (board.getUser().getId() != sessionUser.getId()) {
+            return "redirect:/40x";
+        }
+        request.setAttribute("board", board);
+        // 3. 핵심 기능
+        // localhost:8080/board/{id}/updateForm
+
+        return "/board/updateForm";
+    }
+
+    // Delete(삭제) 메서드
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Integer id, HttpServletRequest request) {
         // 1. PathVariable 값 받기
@@ -37,7 +83,7 @@ public class BoardController {
         // null이면 로그인 페이지로 보내고
         // null 아니면, 3번을 실행!
         User sessionUser = (User) session.getAttribute("sessionUser");
-        // 로그인 안했으면 로그인 화면으로 리디렉션
+        // 로그인 안했으면 로그인 화면으로 리다이렉트
         if (sessionUser == null) {
             return "redirect:/loginForm";
         }
@@ -50,10 +96,11 @@ public class BoardController {
         // 4. Model에 접근해서 삭제 "delete from board_tb where id = :id"
         // BoardRepository.deleteById(id) 호출 -> 리턴 X (void)
         boardRepository.deleteById(id);
-        // 삭제후 홈페이지로 리디렉션
+        // 삭제후 홈페이지로 리다이렉트
         return "redirect:/";
     }
 
+    // Save(저장) 메서드
     @PostMapping("/board/save")
     public String save(WriteDTO writeDTO) {
         // 유효성 검사(부가 로직)

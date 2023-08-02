@@ -3,6 +3,7 @@ package shop.mtcoding.blog.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog.dto.UpdateDTO;
 import shop.mtcoding.blog.dto.WriteDTO;
 import shop.mtcoding.blog.model.Board;
 
@@ -42,7 +43,7 @@ public class BoardRepository {
         return count.intValue();
     }
 
-    // 게시글 목록 조회
+    // findAll() 메서드 게시글 목록 조회
     // localhost:8080?page=0
     public List<Board> findAll(int page) {
         final int SIZE = 3;
@@ -56,6 +57,7 @@ public class BoardRepository {
         return query.getResultList();
     }
 
+    // save() 글 저장 메서드
     @Transactional // Update, delete, insert시에 걸어서 사용
     public void save(WriteDTO writeDTO, Integer userId) {
         // 1. 쿼리문 작성
@@ -76,5 +78,19 @@ public class BoardRepository {
         query.setParameter("id", id);
         // 3. 리턴
         return (Board) query.getSingleResult();
+    }
+
+    // Update, Create, Insert는 @Transacional을 붙여줘야한다.
+    // Update() 메서드
+    @Transactional
+    public void update(UpdateDTO updateDTO, Integer id) {
+        // 1. 쿼리문 작성
+        Query query = em.createNativeQuery("update board_tb set title = :title, content = :content where id = :id");
+        // 2. 변수 바인딩
+        query.setParameter("title", updateDTO.getTitle());
+        query.setParameter("content", updateDTO.getContent());
+        query.setParameter("id", id);
+        // 3. 전송
+        query.executeUpdate();
     }
 }
