@@ -57,15 +57,26 @@ public class BoardController {
     // page에 입력값이 없으면 0이 디폴트로 들어감 (문자열)
     public String index(@RequestParam(defaultValue = "0") Integer page, HttpServletRequest request) {
 
-        List<Board> boardList = boardRepository.findAll(page);
+        List<Board> boardList = boardRepository.findAll(page); // page = 1
+        int totalCount = boardRepository.count();   // totalCount = 5
+        int totalPage = totalCount / 3; // totalPage = 1
+        if (totalPage % 3 > 0) {
+            totalPage = totalPage + 1;  // totalPage = 2
+        }
+        boolean lastPage = totalPage - 1 == page;
+
         System.out.println("테스트 : " + boardList.size());
         System.out.println("테스트 : " + boardList.get(0).getTitle());
 
+        // 페이징 데이터
         request.setAttribute("boardList", boardList);
         request.setAttribute("prevPage", page - 1);
         request.setAttribute("nextPage", page + 1);
         request.setAttribute("first", page == 0 ? true : false);
-        request.setAttribute("last", false);
+        request.setAttribute("last", lastPage);
+        request.setAttribute("totalPage", totalPage);
+        request.setAttribute("totalCount", totalCount);
+
 
         // view 파일 호출, index
         return "index";
