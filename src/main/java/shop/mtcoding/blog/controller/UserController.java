@@ -9,6 +9,7 @@ import shop.mtcoding.blog.dto.LoginDTO;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -25,6 +26,31 @@ public class UserController {
 
     @Autowired // IoC 컨테이너
     private HttpSession session; // request는 가방, session은 서랍
+
+    // 회원정보수정
+    @PostMapping("/update")
+    public String update(User user) {
+        // 1. 인증 검사
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
+        // 2. 권한 체크
+        if (user.getId() != sessionUser.getId()) {
+            return "redirect:/loginForm";
+        }
+        // 3. 유효성 검사(부가 로직)
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            return "redirect:/40x";
+        }
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            return "redirect:/40x";
+        }
+        // 4. 핵심 기능
+        userRepository.update(user);
+
+        return "redirect:/";
+    }
 
     // 로그인
     @PostMapping("/login")

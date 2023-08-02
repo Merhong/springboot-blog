@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.dto.JoinDTO;
 import shop.mtcoding.blog.dto.LoginDTO;
+import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.User;
 
 import javax.persistence.EntityManager;
@@ -19,6 +20,16 @@ public class UserRepository {
     // IoC 컨테이너에서 들고옴
     @Autowired
     private EntityManager em;
+
+    // User id를 통한 상세보기
+    public User findById(Integer id) {
+        // 1. 쿼리문 작성 및 Board 클래스 매핑
+        Query query = em.createNativeQuery("select * from user_tb where id = :id", User.class);
+        // 2. 변수 바인딩
+        query.setParameter("id", id);
+        // 3. 리턴
+        return (User) query.getSingleResult();
+    }
 
     // 로그인에 사용되는 메서드, ID와 Password가 같으면 Pass
     public User findByUsernameAndPassword(LoginDTO loginDTO) {
@@ -39,6 +50,20 @@ public class UserRepository {
         query.setParameter("username", joinDTO.getUsername());
         query.setParameter("password", joinDTO.getPassword());
         query.setParameter("email", joinDTO.getEmail());
+        // 3. 전송
+        query.executeUpdate();
+    }
+
+    // update() 회원정보수정 메서드
+    @Transactional
+    public void update(User user) {
+        // 1. 쿼리문 작성
+        Query query = em.createNativeQuery("update user_tb set username = :username, password = :password, email = :email where id = :id", User.class);
+        // 2. 변수 바인딩
+        query.setParameter("username", user.getUsername());
+        query.setParameter("password", user.getPassword());
+        query.setParameter("email", user.getEmail());
+        query.setParameter("id", user.getId());
         // 3. 전송
         query.executeUpdate();
     }
