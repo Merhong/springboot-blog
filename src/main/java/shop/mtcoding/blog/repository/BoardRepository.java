@@ -17,6 +17,17 @@ public class BoardRepository {
     @Autowired
     private EntityManager em;
 
+    // Update, Create, Insert는 @Transacional을 붙여줘야한다.
+    @Transactional
+    public void deleteById(Integer id) {
+        // 1. 쿼리문 작성
+        Query query = em.createNativeQuery("delete from board_tb where id = :id");
+        // 2. 변수 바인딩
+        query.setParameter("id", id);
+        // 3. 전송
+        query.executeUpdate();
+    }
+
     // select id, title from board_tb
     // resultClass 안붙이고 직접 파싱하려면?
     // object[] 로 리턴됨
@@ -24,24 +35,12 @@ public class BoardRepository {
     // object[1] = 제목1
     public int count() {
         // Entity(Board, User) 타입이 아니라도 기본 자료형도 안됨.
-        Query query = em.createNativeQuery("select count(*) from board_tb", Integer.class);
+        Query query = em.createNativeQuery("select count(*) from board_tb");
         // 원래는 Object 배열로 리턴 받는다, Object 배열은 컬럼의 연속이다.
         // 그룹함수를 써서, 하나의 컬럼을 조회하려면, Object로 리턴한다.
         BigInteger count = (BigInteger) query.getSingleResult();
         return count.intValue();
     }
-
-
-    // Board id를 통한 상세보기
-    public Board findById(int id) {
-        // 1. 쿼리문 작성
-        Query query = em.createNativeQuery("select * from board_tb where id = :id", Board.class);
-        // 2. 변수 바인딩
-        query.setParameter("id", id);
-        // 3. 리턴
-        return (Board) query.getSingleResult();
-    }
-
 
     // 게시글 목록 조회
     // localhost:8080?page=0
@@ -67,5 +66,15 @@ public class BoardRepository {
         query.setParameter("userId", userId);
         // 3. 전송
         query.executeUpdate();
+    }
+
+    // Board id를 통한 상세보기
+    public Board findById(Integer id) {
+        // 1. 쿼리문 작성 및 Board 클래스 매핑
+        Query query = em.createNativeQuery("select * from board_tb where id = :id", Board.class);
+        // 2. 변수 바인딩
+        query.setParameter("id", id);
+        // 3. 리턴
+        return (Board) query.getSingleResult();
     }
 }

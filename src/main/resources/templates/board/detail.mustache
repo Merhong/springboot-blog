@@ -6,27 +6,33 @@
 
 
 	<!-- 메뉴 버튼(돌아가기, 수정, 삭제) -->
-	<div class="mb-2 d-flex justify-content-end">
-		<button type="button" class="btn btn-success me-1">돌아가기</button>
-		<button type="button" class="btn btn-primary me-1">수정</button>
-		<button type="button" class="btn btn-danger me-1">삭제</button>
-	</div>
+	{{#pageOwner}}
+		<div class="mb-2 d-flex justify-content-end">
+			<button type="button" class="btn btn-success me-1">돌아가기</button>
+			<button type="button" class="btn btn-primary me-1">수정</button>
+			<form action="/board/{{board.id}}/delete" method="post">
+				<button type="submit" class="btn btn-danger me-1">삭제</button>
+			</form>
+		</div>
+	{{/pageOwner}}
 
 	<!-- 글 번호, 작성자 -->
 	<div class="info mb-2 d-flex justify-content-end">
-		글 번호 : 1 || 작성자 : Merhong
+		글 번호 : {{board.id}}|| 작성자 : {{board.user.username}}
 	</div>
 
 	<!-- 제목과 내용 -->
-	<div class="content1 mb-3">
-		<h2>
-			{{board.title}}
-		</h2>
-		<hr>
-		<div>
-			{{board.content}}
+	{{#board}}
+		<div class="content1 mb-3">
+			<h2>
+				{{title}}
+			</h2>
+			<hr>
+			<div>
+				{{content}}
+			</div>
 		</div>
-	</div>
+	{{/board}}
 
 	<!-- 댓글(Comment) 등록 -->
 	<div class="card">

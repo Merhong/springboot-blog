@@ -29,6 +29,31 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepository;
 
+    @PostMapping("/board/{id}/delete")
+    public String delete(@PathVariable Integer id, HttpServletRequest request) {
+        // 1. PathVariable 값 받기
+        // 2. 인증 검사
+        // session에 접근해서 sessionUser 키 값을 가져 와서
+        // null이면 로그인 페이지로 보내고
+        // null 아니면, 3번을 실행!
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        // 로그인 안했으면 로그인 화면으로 리디렉션
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
+        // 3. 권한 검사
+        Board board = boardRepository.findById(id);
+        // 게시글을 쓴 유저 ID와 세션 ID가 같지 않으면, 다른 사람이란 뜻.
+        if (board.getUser().getId() != sessionUser.getId()) {
+            return "redirect:/40x";
+        }
+        // 4. Model에 접근해서 삭제 "delete from board_tb where id = :id"
+        // BoardRepository.deleteById(id) 호출 -> 리턴 X (void)
+        boardRepository.deleteById(id);
+        // 삭제후 홈페이지로 리디렉션
+        return "redirect:/";
+    }
+
     @PostMapping("/board/save")
     public String save(WriteDTO writeDTO) {
         // 유효성 검사(부가 로직)
@@ -53,32 +78,35 @@ public class BoardController {
     // 1. 유효성 검사 X
     // 2. 인증검사 X
     // Browser URL : localhost:8080/ or /board 입력시 호출
+    // http://localhost:8080?num=4
     @GetMapping({"/", "/board"})
-    // page에 입력값이 없으면 0이 디폴트로 들어감 (문자열)
-    public String index(@RequestParam(defaultValue = "0") Integer page, HttpServletRequest request) {
+    public String index(
+            @RequestParam(defaultValue = "0") Integer page,
+            HttpServletRequest request) {
+        // 1. 유효성 검사 X
+        // 2. 인증검사 X
 
         List<Board> boardList = boardRepository.findAll(page); // page = 1
-        int totalCount = boardRepository.count();   // totalCount = 5
+        int totalCount = boardRepository.count(); // totalCount = 5
+
+        System.out.println("테스트 : totalCount :" + totalCount);
         int totalPage = totalCount / 3; // totalPage = 1
-        if (totalPage % 3 > 0) {
-            totalPage = totalPage + 1;  // totalPage = 2
+        if (totalCount % 3 > 0) {
+            totalPage = totalPage + 1; // totalPage = 2
         }
-        boolean lastPage = totalPage - 1 == page;
+        boolean last = totalPage - 1 == page;
 
-        System.out.println("테스트 : " + boardList.size());
-        System.out.println("테스트 : " + boardList.get(0).getTitle());
+        System.out.println("테스트 :" + boardList.size());
+        System.out.println("테스트 :" + boardList.get(0).getTitle());
 
-        // 페이징 데이터
         request.setAttribute("boardList", boardList);
         request.setAttribute("prevPage", page - 1);
         request.setAttribute("nextPage", page + 1);
         request.setAttribute("first", page == 0 ? true : false);
-        request.setAttribute("last", lastPage);
+        request.setAttribute("last", last);
         request.setAttribute("totalPage", totalPage);
         request.setAttribute("totalCount", totalCount);
 
-
-        // view 파일 호출, index
         return "index";
     }
 
@@ -96,12 +124,22 @@ public class BoardController {
     // Browser URL : IP주소:포트번호/board/board/id 입력시 호출
     // localhost:8080/board/1
     // localhost:8080/board/2
+    // MVC 패턴
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
-        Board board = boardRepository.findById(id);
-        request.setAttribute("board", board);
+    public String detail(@PathVariable Integer id, HttpServletRequest request) {    // Controller
+        User sessionUser = (User) session.getAttribute("sessionUser"); // 세션접근
+        Board board = boardRepository.findById(id); // M
 
-        // view 파일 호출, board/detail
-        return "board/detail";
+        boolean pageOwner = false;
+        if (sessionUser != null) {
+            System.out.println("테스트 세션 ID : " + sessionUser.getId());
+            System.out.println("테스트 세션 board.getUser().getId() : " + board.getUser().getId());
+            pageOwner = sessionUser.getId() == board.getUser().getId();
+            System.out.println("테스트 : pageOwner : " + pageOwner);
+        }
+
+        request.setAttribute("board", board);
+        request.setAttribute("pageOwner", pageOwner);
+        return "board/detail"; // V
     }
 }
