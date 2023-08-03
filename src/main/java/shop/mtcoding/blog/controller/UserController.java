@@ -3,9 +3,12 @@ package shop.mtcoding.blog.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.dto.JoinDTO;
 import shop.mtcoding.blog.dto.LoginDTO;
+import shop.mtcoding.blog.dto.UpdateDTO;
+import shop.mtcoding.blog.dto.UserUpdateDTO;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.repository.UserRepository;
 
@@ -28,17 +31,22 @@ public class UserController {
     private HttpSession session; // request는 가방, session은 서랍
 
     // 회원정보수정
-    @PostMapping("/update")
-    public String update(User user) {
+    @PostMapping("/user/{id}/update")
+    public String update(@PathVariable Integer id, UserUpdateDTO userUpdateDTO) {
         // 1. 인증 검사
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) {
+            System.out.println("인증 실패");
             return "redirect:/loginForm";
         }
-        // 2. 권한 체크
+        System.out.println("인증검사 통과");
+        // // 2. 권한 체크
+        User user = userRepository.findById(id);
         if (user.getId() != sessionUser.getId()) {
+            System.out.println("권한 없음");
             return "redirect:/loginForm";
         }
+        System.out.println("권한체크 통과");
         // 3. 유효성 검사(부가 로직)
         if (user.getUsername() == null || user.getUsername().isEmpty()) {
             return "redirect:/40x";
@@ -46,8 +54,11 @@ public class UserController {
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
             return "redirect:/40x";
         }
+        System.out.println("유효성 검사 통과");
         // 4. 핵심 기능
-        userRepository.update(user);
+        System.out.println("update 전");
+        userRepository.update(userUpdateDTO, id);
+        System.out.println("update 후");
 
         return "redirect:/";
     }

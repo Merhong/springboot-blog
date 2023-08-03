@@ -76,7 +76,7 @@ public class BoardController {
 
     // Delete(삭제) 메서드
     @PostMapping("/board/{id}/delete")
-    public String delete(@PathVariable Integer id, HttpServletRequest request) {
+    public String delete(@PathVariable Integer id) {
         // 1. PathVariable 값 받기
         // 2. 인증 검사
         // session에 접근해서 sessionUser 키 값을 가져 와서

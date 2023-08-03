@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.dto.JoinDTO;
 import shop.mtcoding.blog.dto.LoginDTO;
+import shop.mtcoding.blog.dto.UserUpdateDTO;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.User;
 
@@ -56,14 +57,14 @@ public class UserRepository {
 
     // update() 회원정보수정 메서드
     @Transactional
-    public void update(User user) {
+    public void update(UserUpdateDTO userUpdateDTO, Integer id) {
         // 1. 쿼리문 작성
         Query query = em.createNativeQuery("update user_tb set username = :username, password = :password, email = :email where id = :id", User.class);
         // 2. 변수 바인딩
-        query.setParameter("username", user.getUsername());
-        query.setParameter("password", user.getPassword());
-        query.setParameter("email", user.getEmail());
-        query.setParameter("id", user.getId());
+        query.setParameter("username", userUpdateDTO.getUsername());
+        query.setParameter("password", userUpdateDTO.getPassword());
+        query.setParameter("email", userUpdateDTO.getEmail());
+        query.setParameter("id", id);
         // 3. 전송
         query.executeUpdate();
     }

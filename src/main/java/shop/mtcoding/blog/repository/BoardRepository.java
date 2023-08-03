@@ -61,7 +61,8 @@ public class BoardRepository {
     @Transactional // Update, delete, insert시에 걸어서 사용
     public void save(WriteDTO writeDTO, Integer userId) {
         // 1. 쿼리문 작성
-        Query query = em.createNativeQuery("insert into board_tb(title, content, user_id, created_at) values(:title, :content, :userId, now())");
+        Query query = em.createNativeQuery(
+                "insert into board_tb(title, content, user_id, created_at) values(:title, :content, :userId, now())");
         // 2. 변수 바인딩
         query.setParameter("title", writeDTO.getTitle());
         query.setParameter("content", writeDTO.getContent());
