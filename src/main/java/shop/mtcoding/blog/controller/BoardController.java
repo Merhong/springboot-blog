@@ -136,15 +136,11 @@ public class BoardController {
         List<Board> boardList = boardRepository.findAll(page); // page = 1
         int totalCount = boardRepository.count(); // totalCount = 5
 
-        System.out.println("테스트 : totalCount :" + totalCount);
         int totalPage = totalCount / 3; // totalPage = 1
         if (totalCount % 3 > 0) {
             totalPage = totalPage + 1; // totalPage = 2
         }
         boolean last = totalPage - 1 == page;
-
-        System.out.println("테스트 :" + boardList.size());
-        System.out.println("테스트 :" + boardList.get(0).getTitle());
 
         request.setAttribute("boardList", boardList);
         request.setAttribute("prevPage", page - 1);
@@ -179,10 +175,10 @@ public class BoardController {
 
         boolean pageOwner = false;
         if (sessionUser != null) {
-            System.out.println("테스트 세션 ID : " + sessionUser.getId());
-            System.out.println("테스트 세션 board.getUser().getId() : " + board.getUser().getId());
+            // System.out.println("테스트 세션 ID : " + sessionUser.getId());
+            // System.out.println("테스트 세션 board.getUser().getId() : " + board.getUser().getId());
             pageOwner = sessionUser.getId() == board.getUser().getId();
-            System.out.println("테스트 : pageOwner : " + pageOwner);
+            // System.out.println("테스트 : pageOwner : " + pageOwner);
         }
 
         request.setAttribute("board", board);

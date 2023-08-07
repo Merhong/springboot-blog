@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.dto.JoinDTO;
 import shop.mtcoding.blog.dto.LoginDTO;
 import shop.mtcoding.blog.dto.UserUpdateDTO;
-import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 // 현재 메모리에 로딩되어 있는 것?
@@ -21,6 +21,21 @@ public class UserRepository {
     // IoC 컨테이너에서 들고옴
     @Autowired
     private EntityManager em;
+
+    // username이 이미 있는지 확인하는 메서드
+    public User findByUsername(String username) {
+        try {
+            // 1. 쿼리문 작성
+            Query query = em.createNativeQuery("select * from user_tb where username = :username", User.class);
+            // 2. 변수 바인딩
+            query.setParameter("username", username);
+            return (User) query.getSingleResult();
+            // 3. 전송
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     // User id를 통한 상세보기
     public User findById(Integer id) {

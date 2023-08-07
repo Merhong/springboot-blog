@@ -1,18 +1,18 @@
 package shop.mtcoding.blog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.dto.JoinDTO;
 import shop.mtcoding.blog.dto.LoginDTO;
-import shop.mtcoding.blog.dto.UpdateDTO;
 import shop.mtcoding.blog.dto.UserUpdateDTO;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.repository.UserRepository;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -29,6 +29,18 @@ public class UserController {
 
     @Autowired // IoC 컨테이너
     private HttpSession session; // request는 가방, session은 서랍
+
+    // localhost:8080/check?username=ssar
+    // AJAX 통신, 뷰가 아닌 데이터를 전송
+    @GetMapping("/check")
+    public ResponseEntity<String> check(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return new ResponseEntity<String>("유저네임이 중복되었습니다.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("유저네임을 사용할 수 있습니다.", HttpStatus.OK);
+    }
+
 
     // 회원정보수정
     @PostMapping("/user/{id}/update")
@@ -100,22 +112,19 @@ public class UserController {
         }
         if (joinDTO.getPassword() == null || joinDTO.getPassword().isEmpty()) {
             return "redirect:/40x";
-
         }
         if (joinDTO.getEmail() == null || joinDTO.getEmail().isEmpty()) {
             return "redirect:/40x";
         }
-        // MVC패턴의 M(Model)
-        try {
-            userRepository.save(joinDTO);
-        } catch (Exception e) {
+        // MVC 패턴의 M(Model)
+        // DB에 해당 username이 있는지 체크해보기
+        // ssar
+        User user = userRepository.findByUsername(joinDTO.getUsername());
+        if (user != null) {
             return "redirect:/50x";
         }
-
-        System.out.println("username : " + joinDTO.getUsername());
-        System.out.println("password : " + joinDTO.getPassword());
-        System.out.println("email : " + joinDTO.getEmail());
-
+        // username이 있다? username이 중복됐을때 걸러짐
+        userRepository.save(joinDTO); // 핵심기능
         return "redirect:/loginForm";
     }
 
