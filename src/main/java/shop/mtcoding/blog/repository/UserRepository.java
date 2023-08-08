@@ -9,7 +9,6 @@ import shop.mtcoding.blog.dto.UserUpdateDTO;
 import shop.mtcoding.blog.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 // 현재 메모리에 로딩되어 있는 것?
@@ -35,8 +34,7 @@ public class UserRepository {
             return null;
         }
     }
-
-
+    
     // User id를 통한 상세보기
     public User findById(Integer id) {
         // 1. 쿼리문 작성 및 Board 클래스 매핑

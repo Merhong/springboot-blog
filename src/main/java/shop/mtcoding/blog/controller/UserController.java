@@ -118,7 +118,6 @@ public class UserController {
         }
         // MVC 패턴의 M(Model)
         // DB에 해당 username이 있는지 체크해보기
-        // ssar
         User user = userRepository.findByUsername(joinDTO.getUsername());
         if (user != null) {
             return "redirect:/50x";

@@ -55,7 +55,7 @@
 		let response = await fetch(`/check?username=${username}`);
 		// 3. 파싱하기
 		let responseBody = await response.text(); // JSON일때: response.json();
-		console.log(responseBody)
+		console.log(responseBody);
 		// 4. 상태코드 확인
 		let btnJoin = document.querySelector("#btnJoin");
 		if (response.status == 200) {

@@ -9,35 +9,30 @@
 	{{#pageOwner}}
 		<div class="mb-2 d-flex justify-content-end">
 			<button type="button" class="btn btn-success me-1">돌아가기</button>
-			<a class="btn btn-primary me-1" href="/board/{{board.id}}/updateForm">수정</a>
-			<form action="/board/{{board.id}}/delete" method="post">
+			<a class="btn btn-primary me-1" href="/board/{{dtos.0.boardId}}/updateForm">수정</a>
+			<form action="/board/{{dtos.0.boardId}}/delete" method="post">
 				<button type="submit" class="btn btn-danger me-1">삭제</button>
 			</form>
 		</div>
 	{{/pageOwner}}
 
-	<!-- 글 번호, 작성자 -->
-	<div class="info mb-2 d-flex justify-content-end">
-		글 번호 : {{board.id}}|| 작성자 : {{board.user.username}}
-	</div>
 
 	<!-- 제목과 내용 -->
-	{{#board}}
-		<div class="content1 mb-3">
-			<h2>
-				{{title}}
-			</h2>
-			<hr>
-			<div>
-				{{content}}
-			</div>
+	<div class="content1 mb-3">
+		<h2>
+			{{dtos.0.boardTitle}}
+		</h2>
+		<hr>
+		<div>
+			{{dtos.0.boardContent}}
 		</div>
-	{{/board}}
+	</div>
 
 	<!-- 댓글(Comment) 등록 -->
 	<div class="card">
 		<div class="card-body">
-			<form action="/board/1" method="post" enctype="application/x-www-form-urlencoded">
+			<form action="/reply/save" method="post" enctype="application/x-www-form-urlencoded">
+				<input type="hidden" name="boardId" value="{{dtos.0.boardId}}">
 				<textarea class="form-control" rows="3" name="comment"></textarea>
 				<div class="d-flex justify-content-end">
 					<button type="submit" class="btn btn-primary mt-2">등록</button>
@@ -52,33 +47,22 @@
 
 		<!-- 댓글 -->
 		<div class="list-group">
-			<form action="/board/1" method="post" enctype="application/x-www-form-urlencoded">
-
-				<div class="list-group-item d-flex justify-content-between align-items-center">
-					<div class="d-flex">
-						<div class="me-3 px-1 bg-dark text-white rounded">
-							Ahong
+			<!-- 댓글아이템 -->
+			{{#dtos}}
+				{{#replyId}}
+					<div class="list-group-item d-flex justify-content-between align-items-center">
+						<div class="d-flex">
+							<div class="px-1 me-1 bg-primary text-white rounded">{{replyUserUsername}}</div>
+							<div>{{replyComment}}</div>
 						</div>
-						<div>
-							댓글1111
-						</div>
+						{{#replyOwner}}
+							<form action="/reply/{{replyId}}/delete" method="post">
+								<button class="btn">🗑</button>
+							</form>
+						{{/replyOwner}}
 					</div>
-					<button class="btn btn-danger">삭제</button>
-				</div>
-
-				<div class="list-group-item d-flex justify-content-between align-items-center">
-					<div class="d-flex">
-						<div class="me-3 px-1 bg-dark text-white rounded">
-							bhong
-						</div>
-						<div>
-							댓글2222
-						</div>
-					</div>
-					<button class="btn btn-danger">삭제</button>
-				</div>
-
-			</form>
+				{{/replyId}}
+			{{/dtos}}
 		</div>
 	</div>
 </div>
