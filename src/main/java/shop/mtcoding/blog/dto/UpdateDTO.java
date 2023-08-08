@@ -10,7 +10,7 @@ import lombok.Setter;
  * 2. Method : POST
  * 3. Request Body : title=값(String)&content=값(String)
  * 4. MIME 타입 : X-WWW-FORM-URLENCODED
- * 5. 응답 : view(html)를 응답함. detail 페이지
+ * 5. 응답 : view(html)를 응답함. detail 페이지d
  * // index로 돌아오면 UX가 박살난다. 수정된 화면으로 돌아오게 해야함.
  */
 
