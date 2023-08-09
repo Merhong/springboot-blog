@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import shop.mtcoding.blog.dto.BoardDetailDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 import shop.mtcoding.blog.dto.ReplyWriteDTO;
-import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.Reply;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.repository.ReplyRepository;
@@ -22,7 +21,11 @@ public class ReplyController {
     private ReplyRepository replyRepository;
 
     @PostMapping("/reply/{id}/delete")
-    public String delete(@PathVariable Integer id) { // replyId
+    public String delete(@PathVariable Integer id, Integer boardId) { // replyId
+        // 유효성 검사
+        if (boardId == null) {
+            return "redirect:/40x";
+        }
         // 1. PathVariable 값 받기
         // 2. 인증 검사
         // session에 접근해서 sessionUser 키 값을 가져 와서
@@ -37,13 +40,13 @@ public class ReplyController {
         Reply reply = replyRepository.findById(id);
         // 게시글을 쓴 유저 ID와 세션 ID가 같지 않으면, 다른 사람이란 뜻.
         if (reply.getUser().getId() != sessionUser.getId()) {
-            return "redirect:/40x";
+            return "redirect:/40x"; // 상태코드 403 : 권한없음.
         }
         // 4. Model에 접근해서 삭제 "delete from reply_tb where id = :id"
         // BoardRepository.deleteById(id) 호출 -> 리턴 X (void)
         replyRepository.deleteCommentById(id);
         // 삭제후 홈페이지로 리다이렉트
-        return "redirect:/";
+        return "redirect:/board/" + boardId;
     }
 
     @PostMapping("/reply/save")

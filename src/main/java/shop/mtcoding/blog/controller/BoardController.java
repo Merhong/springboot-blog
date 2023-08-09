@@ -177,11 +177,12 @@ public class BoardController {
     public String detail(@PathVariable Integer id, HttpServletRequest request) {    // Controller
         User sessionUser = (User) session.getAttribute("sessionUser"); // 세션접근
         List<BoardDetailDTO> dtos = null;
+
+        // 동적 쿼리
         // 로그인하지 않은 상태일때 sessionId 제어 안해주면 NullPointException 터짐
         if (sessionUser == null) {
             dtos = boardRepository.findByIdJoinReply(id, null);
-        }
-        // 로그인하면 sessionId를 다시 재설정 해줘야 함.
+        } // 로그인하면 sessionId를 다시 재설정 해줘야 함.
         else {
             dtos = boardRepository.findByIdJoinReply(id, sessionUser.getId());
         }
@@ -191,13 +192,11 @@ public class BoardController {
             // System.out.println("테스트 세션 ID : " + sessionUser.getId());
             // System.out.println("테스트 세션 board.getUser().getId() : " + board.getUser().getId());
             pageOwner = sessionUser.getId() == dtos.get(0).getBoardUserId();
-            // System.out.println("테스트 : pageOwner : " + pageOwner);
         }
 
         // Request에 담기 -> mustache에서 사용
         request.setAttribute("dtos", dtos);
         request.setAttribute("pageOwner", pageOwner);
-        request.setAttribute("replyOwner", true);
         return "board/detail"; // V
     }
 }
