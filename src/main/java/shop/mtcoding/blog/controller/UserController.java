@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.controller;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,13 +89,24 @@ public class UserController {
 
         // 핵심 기능
         try {
-            User user = userRepository.findByUsernameAndPassword(loginDTO);
-            session.setAttribute("sessionUser", user);
-            return "redirect:/";
+            // 유저네임을 찾고 해싱된 패스워드를 비교해야 함
+            // User user = userRepository.findByUsernameAndPassword(loginDTO);
+            User user = userRepository.findByUsername(loginDTO);
+            System.out.println("loginDTO.getPassword() : " + loginDTO.getPassword());
+            System.out.println("user.getPassword() : " + user.getPassword());
+            // DB의 해싱되서 저장된 패스워드와 로그인창에서 입력한 패스워드를 해싱한 값이 동일하면 세션 생성
+            boolean isValid = BCrypt.checkpw(loginDTO.getPassword(), user.getPassword());
+            if (isValid) {
+                System.out.println("isValid : " + isValid);
+                session.setAttribute("sessionUser", user);
+                return "redirect:/";
+            } else {
+                return "redirect:/exLogin";
+            }
         } catch (Exception e) {
             return "redirect:/exLogin";
         }
-
+        
     }
 
     // 정상인(실무)

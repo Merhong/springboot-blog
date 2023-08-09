@@ -33,6 +33,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // https://mvnrepository.com/artifact/ch.simas.qlrm/qlrm
     implementation group: 'ch.simas.qlrm', name: 'qlrm', version: '1.7.1'
+    // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
+    implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+
 
 }
 
