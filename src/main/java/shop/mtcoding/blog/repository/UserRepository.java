@@ -36,17 +36,17 @@ public class UserRepository {
         }
     }
 
-    public User findByUsername(LoginDTO loginDTO) {
-        try {
-            // 1. 쿼리문 작성
-            Query query = em.createNativeQuery("select * from user_tb where username = :username", User.class);
-            // 2. 변수 바인딩
-            query.setParameter("username", loginDTO.getUsername());
-            return (User) query.getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+    // public User findByUsername(LoginDTO loginDTO) {
+    //     try {
+    //         // 1. 쿼리문 작성
+    //         Query query = em.createNativeQuery("select * from user_tb where username = :username", User.class);
+    //         // 2. 변수 바인딩
+    //         query.setParameter("username", loginDTO.getUsername());
+    //         return (User) query.getSingleResult();
+    //     } catch (Exception e) {
+    //         return null;
+    //     }
+    // }
 
     // User id를 통한 상세보기
     public User findById(Integer id) {
@@ -75,7 +75,7 @@ public class UserRepository {
         Query query = em.createNativeQuery("insert into user_tb(username, password, email) values(:username, :password, :email)");
         // 2. 변수 바인딩
         query.setParameter("username", joinDTO.getUsername());
-        query.setParameter("password", BCrypt.hashpw(joinDTO.getPassword(), BCrypt.gensalt()));
+        query.setParameter("password", joinDTO.getPassword());
         query.setParameter("email", joinDTO.getEmail());
         // 3. 전송
         query.executeUpdate();
@@ -88,7 +88,7 @@ public class UserRepository {
         Query query = em.createNativeQuery("update user_tb set username = :username, password = :password, email = :email where id = :id", User.class);
         // 2. 변수 바인딩
         query.setParameter("username", userUpdateDTO.getUsername());
-        query.setParameter("password", BCrypt.hashpw(userUpdateDTO.getPassword(), BCrypt.gensalt()));
+        query.setParameter("password", userUpdateDTO.getPassword());
         query.setParameter("email", userUpdateDTO.getEmail());
         query.setParameter("id", id);
         // 3. 전송

@@ -1,17 +1,17 @@
 insert into user_tb(username, password, email)
-values ('ssar', '1234', 'ssar@nate.com');
+values ('ssar', '$2a$10$oOqKlkqi97elRcoXATHMNO5lSroCsTaE5cZNpjom53Aofg1i9ImG.', 'ssar@nate.com');
 insert into user_tb(username, password, email)
-values ('asdf', '1234', 'asdf@nate.com');
+values ('asdf', '$2a$10$oOqKlkqi97elRcoXATHMNO5lSroCsTaE5cZNpjom53Aofg1i9ImG.', 'asdf@nate.com');
 insert into board_tb(title, content, user_id, created_at)
-values ('제목1', '내용1', 1, now());
+values ('찾아봐', '내용1', 1, now());
 insert into board_tb(title, content, user_id, created_at)
-values ('제목2', '내용2', 1, now());
+values ('2', '내용2', 1, now());
 insert into board_tb(title, content, user_id, created_at)
-values ('제목3', '내용3', 1, now());
+values ('22', '내용3', 1, now());
 insert into board_tb(title, content, user_id, created_at)
-values ('제목4', '내용4', 1, now());
+values ('222', '내용4', 1, now());
 insert into board_tb(title, content, user_id, created_at)
-values ('제목5', '내용5', 1, now());
+values ('2222', '내용5', 1, now());
 
 insert into reply_tb(comment, user_id, board_id)
 values ('1번글_댓글1', '1', '1');

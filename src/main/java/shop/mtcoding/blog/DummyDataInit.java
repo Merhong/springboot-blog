@@ -13,19 +13,19 @@ import shop.mtcoding.blog.repository.UserRepository;
 
 public class DummyDataInit {
 
-    private final UserRepository userRepository;
-
-    @EventListener(ApplicationReadyEvent.class)
-    @Transactional
-    public void initDB() {
-        initDummyUser();
-    }
-
-    public void initDummyUser() {
-        JoinDTO joinDTO1 = new JoinDTO("ssar", "1234", "ssar@nate.com");
-        JoinDTO joinDTO2 = new JoinDTO("asdf", "1234", "zxcv@nate.com");
-
-        userRepository.save(joinDTO1);
-        userRepository.save(joinDTO2);
-    }
+    // private final UserRepository userRepository;
+    //
+    // @EventListener(ApplicationReadyEvent.class)
+    // @Transactional
+    // public void initDB() {
+    //     initDummyUser();
+    // }
+    //
+    // public void initDummyUser() {
+    //     JoinDTO joinDTO1 = new JoinDTO("ssar", "1234", "ssar@nate.com");
+    //     JoinDTO joinDTO2 = new JoinDTO("asdf", "1234", "zxcv@nate.com");
+    //
+    //     userRepository.save(joinDTO1);
+    //     userRepository.save(joinDTO2);
+    // }
 }

@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class BoardRepository {
@@ -82,6 +83,16 @@ public class BoardRepository {
         return count.intValue();
     }
 
+    public int count(String keyword) {
+        // Entity(Board, User) 타입이 아니라도 기본 자료형도 안됨.
+        Query query = em.createNativeQuery("select count(*) from board_tb where title like :keyword");
+        query.setParameter("keyword", "%" + keyword + "%");
+        // 원래는 Object 배열로 리턴 받는다, Object 배열은 컬럼의 연속이다.
+        // 그룹함수를 써서, 하나의 컬럼을 조회하려면, Object로 리턴한다.
+        BigInteger count = (BigInteger) query.getSingleResult();
+        return count.intValue();
+    }
+
     // findAll() 메서드 게시글 목록 조회
     // localhost:8080?page=0
     public List<Board> findAll(int page) {
@@ -95,6 +106,20 @@ public class BoardRepository {
         // 3. 출력
         return query.getResultList();
     }
+
+    public List<Board> findAll(int page, String keyword) {
+        final int SIZE = 3;
+        // 1. 쿼리문 작성 (페이징 쿼리)
+        // limit은 마지막에 들어간다.
+        Query query = em.createNativeQuery("select * from board_tb where title like :keyword order by id desc limit :page, :size", Board.class);
+        // 2. 변수 바인딩
+        query.setParameter("page", page * SIZE);
+        query.setParameter("size", SIZE);
+        query.setParameter("keyword", "%" + keyword + "%");
+        // 3. 출력
+        return query.getResultList();
+    }
+
 
     // save() 글 저장 메서드
     @Transactional // Update, delete, insert시에 걸어서 사용

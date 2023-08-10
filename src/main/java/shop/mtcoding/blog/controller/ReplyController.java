@@ -32,21 +32,17 @@ public class ReplyController {
         // null이면 로그인 페이지로 보내고
         // null 아니면, 3번을 실행!
         User sessionUser = (User) session.getAttribute("sessionUser");
-        // 로그인 안했으면 로그인 화면으로 리다이렉트
         if (sessionUser == null) {
-            return "redirect:/loginForm";
+            return "redirect:/loginForm"; // 로그인 안했으면 로그인 화면으로 리디렉트
         }
         // 3. 권한 검사
         Reply reply = replyRepository.findById(id);
-        // 게시글을 쓴 유저 ID와 세션 ID가 같지 않으면, 다른 사람이란 뜻.
-        if (reply.getUser().getId() != sessionUser.getId()) {
+        if (reply.getUser().getId() != sessionUser.getId()) { // 게시글을 쓴 유저 ID와 세션 ID가 같지 않으면, 다른 사람이란 뜻.
             return "redirect:/40x"; // 상태코드 403 : 권한없음.
         }
         // 4. Model에 접근해서 삭제 "delete from reply_tb where id = :id"
-        // BoardRepository.deleteById(id) 호출 -> 리턴 X (void)
         replyRepository.deleteCommentById(id);
-        // 삭제후 홈페이지로 리다이렉트
-        return "redirect:/board/" + boardId;
+        return "redirect:/board/" + boardId; // 삭제후 홈페이지로 리다이렉트
     }
 
     @PostMapping("/reply/save")
@@ -66,7 +62,7 @@ public class ReplyController {
             return "redirect:/loginForm";
         }
 
-        // 댓글 쓰기
+        // 댓글 저장
         replyRepository.save(replyWriteDTO, sessionUser.getId());
 
         return "redirect:/board/" + replyWriteDTO.getBoardId();

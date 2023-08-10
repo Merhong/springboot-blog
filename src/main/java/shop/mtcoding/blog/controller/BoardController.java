@@ -44,7 +44,7 @@ public class BoardController {
             return "redirect:/loginForm";
         }
         // 2. 권한 체크
-        // Board를 조회해서 가방(request)에 담는다
+        // Board 테이블에서 id가 같은 튜플을 조회
         Board board = boardRepository.findById(id);
         // 게시글을 쓴 유저 ID와 세션 ID가 같지 않으면, 다른 사람이란 뜻.
         if (board.getUser().getId() != sessionUser.getId()) {
@@ -53,11 +53,10 @@ public class BoardController {
         // 3. 핵심 기능
         // update board_tb set title = :title, content = :content where id = :id
         boardRepository.update(updateDTO, id);
-        // update() 메서드 호출후에 갱신된 글로 리다이렉트
-        return "redirect:/board/" + id;
+        return "redirect:/board/" + id; // update() 메서드 호출후에 갱신된 글로 리다이렉트
     }
 
-    // UpdateForm
+    // UpdateForm 회원정보수정 페이지
     @GetMapping("/board/{id}/updateForm")
     public String updateForm(@PathVariable Integer id, HttpServletRequest request) {
         // 1. 인증 검사
@@ -72,9 +71,9 @@ public class BoardController {
         if (board.getUser().getId() != sessionUser.getId()) {
             return "redirect:/40x";
         }
-        request.setAttribute("board", board);
         // 3. 핵심 기능
         // localhost:8080/board/{id}/updateForm
+        request.setAttribute("board", board);
 
         return "/board/updateForm";
     }
@@ -98,11 +97,10 @@ public class BoardController {
         if (board.getUser().getId() != sessionUser.getId()) {
             return "redirect:/40x";
         }
-        // 4. Model에 접근해서 삭제 "delete from board_tb where id = :id"
-        // BoardRepository.deleteById(id) 호출 -> 리턴 X (void)
+        // 4. 핵심 기능
+        // Model에 접근해서 삭제 "delete from board_tb where id = :id"
         boardRepository.deleteById(id);
-        // 삭제후 홈페이지로 리다이렉트
-        return "redirect:/";
+        return "redirect:/"; // 삭제후 홈페이지로 리다이렉트
     }
 
     // Save(저장) 메서드
@@ -115,13 +113,13 @@ public class BoardController {
         if (writeDTO.getContent() == null || writeDTO.getContent().isEmpty()) {
             return "redirect:/40x";
         }
-        // 핵심 기능 : 인증 체크
+        // 인증 체크
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) {
             return "redirect:/loginForm";
         }
-
-        boardRepository.save(writeDTO, sessionUser.getId());
+        // 핵심 기능
+        boardRepository.save(writeDTO, sessionUser.getId()); // 저장
 
         return "redirect:/";
     }
@@ -133,13 +131,26 @@ public class BoardController {
     // http://localhost:8080?num=4
     @GetMapping({"/", "/board"})
     public String index(
+            @RequestParam(defaultValue = "") String keyword, // defaultvalue 없으면 공백시에 null이 들어온다.
             @RequestParam(defaultValue = "0") Integer page,
             HttpServletRequest request) {
         // 1. 유효성 검사 X
         // 2. 인증검사 X
 
-        List<Board> boardList = boardRepository.findAll(page); // page = 1
-        int totalCount = boardRepository.count(); // totalCount = 5
+        List<Board> boardList = null;
+        int totalCount = 0;
+        // 검색어가 없을때 조건
+        if (keyword.isBlank()) { // 공백 or 값 없음!
+            request.setAttribute("keyword", keyword);
+            boardList = boardRepository.findAll(page); // page = 1
+            totalCount = boardRepository.count(); // total = 5
+        }
+        // 검색어가 있을때 조건
+        else {
+            request.setAttribute("keyword", keyword);
+            boardList = boardRepository.findAll(page, keyword); // page = 1
+            totalCount = boardRepository.count(keyword); // total = 5
+        }
 
         int totalPage = totalCount / 3; // totalPage = 1
         if (totalCount % 3 > 0) {

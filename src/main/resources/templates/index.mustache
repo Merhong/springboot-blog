@@ -1,6 +1,14 @@
 {{> /layout/header}}
 
 <div class="container p-5">
+	<!--검색창-->
+	<div class="mb-2 d-flex justify-content-end">
+		<form class="d-flex" action="/" method="get">
+			<input class="form-control me-2" type="text" name="keyword" placeholder="Search" required>
+			<button class="btn btn-primary" type="submit">Search</button>
+		</form>
+	</div>
+
 	{{#boardList}}
 		<div class="card" style="width:400px">
 			<div class="card-body">
@@ -13,8 +21,18 @@
 
 <!--disabled-->
 <ul class="pagination d-flex justify-content-center">
-	<li class="page-item {{#first}}disabled{{/first}}"><a class="page-link" href="?page={{prevPage}}">Previous</a></li>
-	<li class="page-item"{{#last}}disabled{{/last}}><a class="page-link" href="?page={{nextPage}}">Next</a></li>
+	<li class="page-item {{#first}}disabled{{/first}}">
+		<a class="page-link"
+		   href="?page={{prevPage}}&keyword={{keyword}}">
+		Previous
+		</a>
+	</li>
+	<li class="page-item"{{#last}}disabled{{/last}}>
+		<a class="page-link"
+		   href="?page={{nextPage}}&keyword={{keyword}}">
+		Next
+		</a>
+	</li>
 </ul>
 
 {{> /layout/footer}}
