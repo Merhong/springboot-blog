@@ -230,5 +230,4 @@ public class UserController {
         // redirect는 스프링에서 지원하는 문법
         return "redirect:/";
     }
-
 }

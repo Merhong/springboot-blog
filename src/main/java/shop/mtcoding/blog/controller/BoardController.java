@@ -31,10 +31,7 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
-
-    @Autowired
-    private ReplyRepository replyRepository;
-
+    
     // Update 기능 구현
     @PostMapping("/board/{id}/update")
     public String update(@PathVariable Integer id, UpdateDTO updateDTO) {

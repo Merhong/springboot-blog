@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class BoardRepository {
@@ -24,6 +23,7 @@ public class BoardRepository {
     // Board id를 통한 댓글목록 보기
     public List<BoardDetailDTO> findByIdJoinReply(Integer boardId, Integer sessionUserId) {
         // 1. 쿼리문 작성 및 Reply 클래스 매핑
+
         String sql = "select ";
         sql += "b.id board_id, ";
         sql += "b.content board_content, ";
@@ -44,8 +44,8 @@ public class BoardRepository {
         sql += "on r.user_id = ru.id ";
         sql += "where b.id = :boardId ";
         sql += "order by r.id desc";
-        // 2. 변수 바인딩
         Query query = em.createNativeQuery(sql);
+        // 2. 변수 바인딩
         query.setParameter("boardId", boardId);
         if (sessionUserId != null) {
             query.setParameter("sessionUserId", sessionUserId);
@@ -120,21 +120,6 @@ public class BoardRepository {
         return query.getResultList();
     }
 
-
-    // save() 글 저장 메서드
-    @Transactional // Update, delete, insert시에 걸어서 사용
-    public void save(WriteDTO writeDTO, Integer userId) {
-        // 1. 쿼리문 작성
-        Query query = em.createNativeQuery(
-                "insert into board_tb(title, content, user_id, created_at) values(:title, :content, :userId, now())");
-        // 2. 변수 바인딩
-        query.setParameter("title", writeDTO.getTitle());
-        query.setParameter("content", writeDTO.getContent());
-        query.setParameter("userId", userId);
-        // 3. 전송
-        query.executeUpdate();
-    }
-
     // Board id를 통한 상세보기
     public Board findById(Integer id) {
         // 1. 쿼리문 작성 및 Board 클래스 매핑
@@ -155,6 +140,20 @@ public class BoardRepository {
         query.setParameter("title", updateDTO.getTitle());
         query.setParameter("content", updateDTO.getContent());
         query.setParameter("id", id);
+        // 3. 전송
+        query.executeUpdate();
+    }
+
+    // save() 글 저장 메서드
+    @Transactional // Update, delete, insert시에 걸어서 사용
+    public void save(WriteDTO writeDTO, Integer userId) {
+        // 1. 쿼리문 작성
+        Query query = em.createNativeQuery(
+                "insert into board_tb(title, content, user_id, created_at) values(:title, :content, :userId, now())");
+        // 2. 변수 바인딩
+        query.setParameter("title", writeDTO.getTitle());
+        query.setParameter("content", writeDTO.getContent());
+        query.setParameter("userId", userId);
         // 3. 전송
         query.executeUpdate();
     }

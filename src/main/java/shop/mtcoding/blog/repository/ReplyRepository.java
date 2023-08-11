@@ -42,7 +42,7 @@ public class ReplyRepository {
         return (Reply) query.getSingleResult();
     }
 
-    // save() 글 저장 메서드
+    // save() 댓글 저장 메서드
     @Transactional // Update, delete, insert시에 걸어서 사용
     public void save(ReplyWriteDTO replyWriteDTO, Integer userId) {
         // 1. 쿼리문 작성
