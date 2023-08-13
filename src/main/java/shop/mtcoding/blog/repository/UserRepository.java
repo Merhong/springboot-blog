@@ -35,19 +35,7 @@ public class UserRepository {
         }
     }
 
-    // public User findByUsername(LoginDTO loginDTO) {
-    //     try {
-    //         // 1. 쿼리문 작성
-    //         Query query = em.createNativeQuery("select * from user_tb where username = :username", User.class);
-    //         // 2. 변수 바인딩
-    //         query.setParameter("username", loginDTO.getUsername());
-    //         return (User) query.getSingleResult();
-    //     } catch (Exception e) {
-    //         return null;
-    //     }
-    // }
-
-    // User id를 통한 상세보기
+    // User id를 통한 회원정보 상세보기
     public User findById(Integer id) {
         // 1. 쿼리문 작성 및 Board 클래스 매핑
         Query query = em.createNativeQuery("select * from user_tb where id = :id", User.class);
