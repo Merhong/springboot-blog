@@ -9,4 +9,6 @@ public class BlogApplication {
     public static void main(String[] args) {
         SpringApplication.run(BlogApplication.class, args);
     }
+
+    // 240206 MacBook Github Test
 }
